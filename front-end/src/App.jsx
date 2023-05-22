@@ -5,13 +5,23 @@ import Projects from "./components/projects/Projects";
 import Skills from "./components/skills/Skills";
 import Experience from "./components/experience/Experience";
 import Contact from "./components/contact/Contact";
+import { useState } from "react";
 import "./index.css";
 function App() {
   
+ const[state,setState] = useState({
+  web3:null,
+  contract:null
+ })
 
+ const saveState = (state)=>{
+  console.log(state);
+  setState(state);
+ }
+  
   return (
     <>
-      <Wallet ></Wallet>
+      <Wallet saveState = {saveState }></Wallet>
       <Hero />
       <Handles />
       <Projects/>
