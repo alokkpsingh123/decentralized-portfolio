@@ -24,7 +24,7 @@ function App() {
       <Wallet saveState = {saveState }></Wallet>
       <Hero />
       <Handles />
-      <Projects/>
+      <Projects state = {state}/>
       <Skills />
       <Experience/>
       <Contact/>

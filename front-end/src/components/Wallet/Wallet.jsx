@@ -14,11 +14,11 @@ const Wallet = ({saveState}) => {
          await window.ethereum.request({method: 'eth_requestAccounts'});
          const contract  = new web3.eth.Contract(
             ABI,
-            "0x4E675cA8903c43e67eEA700e250097eAd1D40171"
+            "0xe8E5688A331388582cA5eAb23f583AcaCe3e1626"
          );
          setConnected(false);
          saveState({web3:web3,contract:contract});
-        //  console.log(contract);
+         console.log(contract);
       } catch (error) {
         alert("Please install metamask");
       }
