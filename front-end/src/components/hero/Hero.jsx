@@ -1,10 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, ModalBody, Row } from "reactstrap";
-import heroImg from "../../assets/hero-img.png";
+import heroImg from "../../assets/alok.jpeg";
 import "./Hero.css";
 
-const Hero = () => {
+const Hero = ({ state }) => {
   const [modal, setModal] = useState(false);
+  const [des, setDes] = useState("");
+
+  useEffect(() => {
+    const { contract } = state;
+    const des = async () => {
+      const desText = await contract.methods.description().call();
+      setDes(desText);
+    };
+    contract && des();
+  }, [state]);
 
   return (
     <section className="hero">
@@ -12,17 +22,17 @@ const Hero = () => {
         <div className="hero-text">
           <p>
             <span>Alok </span>
-            is a Full-Stack Blockchain Developer From India.
+            Full-Stack Blockchain Developer From India.
           </p>
           <h1>I develop decentralised apps in web3 space.</h1>
-          <h3>Add Your Description</h3>
+          <h3>{des}</h3>
           {/*  =========popup bootstrap==========  */}
 
           <Modal size="md" isOpen={modal} toggle={() => setModal(!modal)}>
             <ModalBody>
               <Row className="text-align">
                 <label htmlFor="" toggle={() => setModal(!modal)}>
-                  Mail Id - Kshitij123@gmail.com
+                  Mail Id -alokkpsingh123@gmail.com
                 </label>
               </Row>
             </ModalBody>

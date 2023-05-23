@@ -4,34 +4,54 @@ import { Modal, ModalHeader, ModalBody, Row, Button } from "reactstrap";
 import img from "../../assets/img1.png";
 import "./Projects.css";
 
-const Projects = ({state}) => {
+const Projects = ({ state }) => {
   const [modal, setModal] = useState(false);
-  const [projects,setProjects] = useState([]);
+  const [projects, setProjects] = useState([]);
 
-  useEffect(()=>{
-    const {contract} = state;
-    const projectDetails = async()=>{
-        const projects = await contract.methods.allProjects().call();
-        setProjects(projects);
-        console.log(projects);
-    }
+  useEffect(() => {
+    const { contract } = state;
+    const projectDetails = async () => {
+      const projects = await contract.methods.allProjects().call();
+      setProjects(projects);
+      console.log(projects);
+    };
     contract && projectDetails();
-  },[state])
+  }, [state]);
 
+  const donateEth = async () => {
+    event.preventDefault();
+    try {
+      const { web3, contract } = state;
+      const eth = document.querySelector("#eth").value;
+      const weiValue = web3.utils.toWei(eth, "ether");
+      const accounts = await web3.eth.getAccounts();
+      const trans = await contract.methods
+        .donate()
+        .send({ from: accounts[0], value: weiValue, gas: 480000 });
+      alert("Transaction Successful"); 
+      // window.location.reload();
+    } catch (error) {
+      alert("Transaction Not Successful");
+    }
+  };
   return (
     <section className="project-section">
       <h1 className="title">Projects </h1>
       <div className="card-wrapper">
         {projects.map((project) => {
+          const githubLink = `https://github.com/alokkpsingh123/${project.githubLink}`;
           return (
             <a
-              href="#"
+              href={githubLink}
               className="project-card"
               target="_blank"
               rel="noopener noreferrer"
             >
               <div className="card-img">
-                <img src={img} alt="" />
+                <img
+                  src={`https://ipfs.io/ipfs/${project.image}`}
+                  alt="Loading..."
+                />
               </div>
               <div className="card-text">
                 <h3>{project.name}</h3>
@@ -48,7 +68,7 @@ const Projects = ({state}) => {
           Enter the ETH you want to donate!
         </ModalHeader>
         <ModalBody>
-          <form>
+          <form onSubmit={donateEth}>
             <Row>
               <input id="eth" type="text" />
               <Button className="mt-4">Send</Button>
@@ -58,7 +78,7 @@ const Projects = ({state}) => {
       </Modal>
       {/*  =========popup bootstrap end==========  */}
       <p className="donate" onClick={() => setModal(true)}>
-        Liked the dummyValue's ? Consider donating Eth's{" "}
+        Liked the Projects's ? Consider donating Eth's{" "}
         <FaDonate className="icon" />
       </p>
     </section>
